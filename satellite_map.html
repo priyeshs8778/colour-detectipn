@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Satellite Map</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+</head>
+<body>
+<h1>Live Satellite Map</h1>
+<div id="map" style="height: 600px;"></div>
+<script>
+    var map = L.map('map').setView([20, 78], 4);
+
+    // Add OpenStreetMap tiles
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+    // Fetch ISS location data and add a marker
+    fetch('https://api.wheretheiss.at/v1/satellites/25544')
+        .then(response => response.json())
+        .then(data => {
+            var marker = L.marker([data.latitude, data.longitude]).addTo(map);
+            marker.bindPopup(`<b>ISS Location:</b><br>Lat: ${data.latitude}, Lon: ${data.longitude}`).openPopup();
+        });
+</script>
+</body>
+</html>
